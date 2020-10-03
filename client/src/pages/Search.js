@@ -5,29 +5,33 @@ import API from "../utils/API";
 import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
-import { Input, FormBtn } from "../components/Form";
+import { Input, SearchBtn } from "../components/Form";
+import { SearchResultsList, SearchResultsListItem } from "../components/SearchResults"
+import SaveBtn from "../components/SaveBtn";
 
 function Search() {
   const [books, setBooks] = useState([])
   const [formObject, setFormObject] = useState({})
 
-  useEffect(() => {
-    loadBooks()
-  }, [])
+  console.log(`Books List: ${books}`);
+  
+  // useEffect(() => {
+  //   loadBooks()
+  // }, [])
 
-  function loadBooks() {
-    API.getBooks()
-      .then(res => 
-        setBooks(res.data)
-      )
-      .catch(err => console.log(err));
-  };
+  // function loadBooks() {
+  //   API.getBooks()
+  //     .then(res => 
+  //       setBooks(res.data)
+  //     )
+  //     .catch(err => console.log(err));
+  // };
 
-  function deleteBook(id) {
-    API.deleteBook(id)
-      .then(res => loadBooks())
-      .catch(err => console.log(err));
-  }
+  // function deleteBook(id) {
+  //   API.deleteBook(id)
+  //     .then(res => loadBooks())
+  //     .catch(err => console.log(err));
+  // }
 
   function handleInputChange(event) {
     const { name, value } = event.target;
@@ -40,30 +44,35 @@ function Search() {
       API.searchBook({
         title: formObject.title,
       })
-        .then(res => console.log(res))
+        .then(res => {
+          console.log(res.data.items);
+          setBooks(res.data.items)
+        }
+        //searchRes = res.
+        )
         .catch(err => console.log(err));
     }
   };
 
-  function handleFormSubmit(event) {
+  function handleSaveBook(event) {
     event.preventDefault();
-    if (formObject.title && formObject.author) {
-      API.saveBook({
-        title: formObject.title,
-        author: formObject.author,
-        synopsis: formObject.synopsis
-      })
-        .then(res => loadBooks())
-        .catch(err => console.log(err));
-    }
+    console.log(event);
+      // API.saveBook({
+      //   title: this.title,
+      //   authors: this.authors,
+      //   description: this.description
+      // })
+      //   .then(res => console.log("Trying to save book..."))
+      //   .catch(err => console.log(err));
+    
   };
 
     return (
       <Container fluid>
-        <Row>
-          <Col size="md-6">
+
             <Jumbotron>
-              <h1>Google Books Search</h1>
+              <h1>(React) Google Books Search</h1>
+              <h2>Search for and Save Books of Interest</h2>
             </Jumbotron>
             <form>
               <Input
@@ -71,36 +80,40 @@ function Search() {
                 name="title"
                 placeholder="Title (required)"
               />
-              <FormBtn
+              <SearchBtn
                 disabled={!(formObject.title)}
                 onClick={handleSearchBook}
               >
                 Search Book
-              </FormBtn>
+              </SearchBtn>
             </form>
-          </Col>
-          <Col size="md-6 sm-12">
-            <Jumbotron>
-              <h1>Books On My List</h1>
-            </Jumbotron>
-            {books.length ? (
-              <List>
-                {books.map(book => (
-                  <ListItem key={book._id}>
-                    <Link to={"/books/" + book._id}>
-                      <strong>
-                        {book.title} by {book.author}
-                      </strong>
-                    </Link>
-                    <DeleteBtn onClick={() => deleteBook(book._id)} />
-                  </ListItem>
-                ))}
-              </List>
-            ) : (
-              <h3>No Results to Display</h3>
-            )}
-          </Col>
-        </Row>
+            <SearchResultsList>
+            {books.map(book => {
+            return (
+              <div>
+              <SearchResultsListItem
+              key={book.id} 
+              authors={book.volumeInfo.authors ? book.volumeInfo.authors : ["No Author Available"]}
+              title={book.volumeInfo.title}
+              description={book.volumeInfo.description ? 
+                book.volumeInfo.description : "No Description Available"}
+              link={book.volumeInfo.infoLink}
+              thumbnail={book.volumeInfo.imageLinks.thumbnail ? 
+                book.volumeInfo.imageLinks.thumbnail : "#"}
+              />
+              <SaveBtn
+                disabled={!(formObject.title)}
+                onClick={handleSaveBook}
+                title={book.volumeInfo.title}
+                authors={book.volumeInfo.authors ? book.volumeInfo.authors : ["No Author Available"]}
+                description={book.volumeInfo.description ? 
+                  book.volumeInfo.description : "No Description Available"}
+                >Save Book</SaveBtn>     
+              </div>
+            )
+              })}
+            </SearchResultsList>
+
       </Container>
     );
   }
