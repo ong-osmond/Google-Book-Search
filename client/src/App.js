@@ -1,19 +1,20 @@
 import React from "react";
-import Search from "./pages/Search";
-import Detail from "./pages/Detail";
-import NoMatch from "./pages/NoMatch";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Nav from "./components/Nav";
-import { BrowserRouter } from "react-router-dom";
+import Search from "./pages/Search";
+import Saved from "./pages/Saved";
 
-// The app will not render correctly until you setup a Route component.
-// Refer to the Basic Example documentation if you need to.
-// (https://reacttraining.com/react-router/web/example/basic)
 function App() {
   return (
     <BrowserRouter>
     <div>
       <Nav />
-      <Search />
+      <Switch>
+              <Route exact path="/" component={Search} />
+              <Route path="/savedBooks" component={Saved} />
+              <Route exact path="/books/:id" component={null} />
+              <Route component={null} />
+      </Switch>
     </div>
     </BrowserRouter>
   );

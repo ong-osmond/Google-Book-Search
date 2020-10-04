@@ -1,13 +1,22 @@
 import React from "react";
-//import "./style.css";
+import API from "../../utils/API";
+import "./style.css";
 
 function SaveBtn(props) {
-    return (
-        <button {...props} style={{ float: "right", marginBottom: 10 }} className="btn btn-success">
-          {props.children}
-        </button>
-      );
-    
+  return (
+    <div>
+      <button
+        type="primary"
+        onClick={() => {
+          API.saveBook(props).then(alert("Book has been saved!"));
+        }}
+        style={{ float: "right", marginBottom: 10 }}
+        className="btn btn-success"
+      >
+        Save Book
+      </button>
+    </div>
+  );
 }
 
 export default SaveBtn;

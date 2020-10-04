@@ -1,13 +1,25 @@
 import React from "react";
+import API from "../../utils/API";
 import "./style.css";
 
-// The ...props means, spread all of the passed props onto this element
-// That way we don't have to define them all individually
+function refreshPage() {
+  window.location.reload();
+}
+
 function DeleteBtn(props) {
   return (
-    <span className="delete-btn" {...props} role="button" tabIndex="0">
-      ✗
-    </span>
+    <div>
+      <button
+        type="button"
+        onClick={() => {
+          API.deleteBook(props.id).then(refreshPage());
+        }}
+        style={{ float: "right", marginBottom: 10 }}
+        className="btn btn-danger"
+      >
+        Delete Book
+      </button>
+    </div>
   );
 }
 

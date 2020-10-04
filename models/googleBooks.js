@@ -5,7 +5,7 @@ const googleBooksSchema = new Schema({
   title: { type: String, required: true },
   authors: { type: Array, required: true },
   description: String,
-  image: String,
+  thumbnail: String,
   link: String
 });
 
