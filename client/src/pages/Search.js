@@ -2,32 +2,35 @@ import React, { useState, useEffect } from "react";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Container } from "../components/Grid";
-import { Input, SearchBtn } from "../components/Form";
+import { Input, SearchBtn } from "../components/SearchForm";
 import {
   SearchResultsList,
   SearchResultsListItem,
 } from "../components/SearchResults";
-import SaveBtn from "../components/SaveBtn";
 
 function Search() {
   const [books, setBooks] = useState([]);
-  const [formObject, setFormObject] = useState({});
+  const [searchTerm, setsearchTerm] = useState({});
 
   function handleInputChange(event) {
+    event.preventDefault();
     const { name, value } = event.target;
-    setFormObject({ ...formObject, [name]: value });
+    setsearchTerm({ ...searchTerm, [name]: value });
   }
 
   function handleSearchBook(event) {
     event.preventDefault();
-    if (formObject.title) {
+    if (searchTerm.title) {
       API.searchBook({
-        title: formObject.title,
+        title: searchTerm.title,
       })
         .then((res) => {
           setBooks(res.data.items);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          searchTerm.title = "";
+          console.log(err);
+        })
     }
   }
 
@@ -43,60 +46,42 @@ function Search() {
           name="title"
           placeholder="Please enter a book's title"
         />
-        <SearchBtn disabled={!formObject.title} onClick={handleSearchBook}>
+        <SearchBtn disabled={!searchTerm.title} onClick={handleSearchBook}>
           Search Book
         </SearchBtn>
       </form>
-      <SearchResultsList>
-        {books.map((book) => {
-          return (
-            <div>
-              <SearchResultsListItem
-                key={book.id}
-                authors={
-                  book.volumeInfo.authors
-                    ? book.volumeInfo.authors
-                    : ["No Author Available"]
-                }
-                title={book.volumeInfo.title}
-                description={
-                  book.volumeInfo.description
-                    ? book.volumeInfo.description
-                    : "No Description Available"
-                }
-                link={book.volumeInfo.infoLink}
-                thumbnail={
-                  book.volumeInfo.imageLinks.thumbnail
-                    ? book.volumeInfo.imageLinks.thumbnail
-                    : "#"
-                }
-              />
-              <SaveBtn
-                disabled={!book.volumeInfo.title}
-                authors={
-                  book.volumeInfo.authors
-                    ? book.volumeInfo.authors
-                    : ["No Author Available"]
-                }
-                title={book.volumeInfo.title}
-                description={
-                  book.volumeInfo.description
-                    ? book.volumeInfo.description
-                    : "No Description Available"
-                }
-                link={book.volumeInfo.infoLink}
-                thumbnail={
-                  book.volumeInfo.imageLinks.thumbnail
-                    ? book.volumeInfo.imageLinks.thumbnail
-                    : "#"
-                }
-              >
-                Save Book
-              </SaveBtn>
-            </div>
-          );
-        })}
-      </SearchResultsList>
+      {books && books.length > 0 ? (
+        <SearchResultsList>
+          {books.map((book) => {
+            return (
+              <row>
+                <SearchResultsListItem
+                  key={book.id}
+                  authors={
+                    book.volumeInfo.authors
+                      ? book.volumeInfo.authors
+                      : ["No Author Available"]
+                  }
+                  title={book.volumeInfo.title}
+                  description={
+                    book.volumeInfo.description
+                      ? book.volumeInfo.description
+                      : "No Description Available"
+                  }
+                  link={book.volumeInfo.infoLink}
+                  thumbnail={
+                    book.volumeInfo.imageLinks.thumbnail
+                      ? book.volumeInfo.imageLinks.thumbnail
+                      : "#"
+                  }
+                />
+              </row>
+            );
+          })}
+        </SearchResultsList>
+      ) : (
+        <h3>No Results to Display</h3>
+      )}
     </Container>
   );
 }

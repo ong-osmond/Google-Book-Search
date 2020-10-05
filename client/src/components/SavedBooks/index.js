@@ -32,6 +32,8 @@ export class SavedBooksListItem extends React.Component {
               >
                 View Book
               </a>
+            </Col>
+            <Col size="xs-1 sm-1">
               <DeleteBtn id={this.props.id} />
             </Col>
           </Row>

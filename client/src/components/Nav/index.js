@@ -3,7 +3,7 @@ import React from "react";
 function Nav() {
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-success navbar-fixed-top">
         <ul className="navbar-nav">
         <li className="nav-item">
             <a className="nav-link" id="search" href="/">
