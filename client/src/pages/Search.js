@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Container } from "../components/Grid";
@@ -30,7 +30,7 @@ function Search() {
         .catch((err) => {
           searchTerm.title = "";
           console.log(err);
-        })
+        });
     }
   }
 
@@ -70,7 +70,7 @@ function Search() {
                   }
                   link={book.volumeInfo.infoLink}
                   thumbnail={
-                    book.volumeInfo.imageLinks.thumbnail
+                    book.volumeInfo.imageLinks
                       ? book.volumeInfo.imageLinks.thumbnail
                       : "#"
                   }
