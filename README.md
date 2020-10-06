@@ -15,7 +15,7 @@ This is the link to a preview of the application: https://protected-basin-43986.
 * [License](#License)  
 
 ## Installation: 
-1. Clone the Budget-Tracker project files to your local machine using this link: https://github.com/ong-osmond/Google-Book-Search.git  
+1. Clone the Google Books Search project files to your local machine using this link: https://github.com/ong-osmond/Google-Book-Search.git  
 2. Install NODE.js on your machine. Find the latest version on https://nodejs.org/en/
 3. Open Git Bash or any Command Line tool and type in "NPM INSTALL". 
 4. Install MONGO DB and run the MONGO DB service on your machine.
